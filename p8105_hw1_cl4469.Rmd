@@ -1,21 +1,43 @@
 ---
 title: "Simple document"
-output: github_document
+output: pdf_document
 ---
 
-I'm an R Markdown document! 
+# Problem 1
 
-# Section 1
-
-Here's a **code chunk** that samples from 
-a _normal distribution_:
+Load the moderndive library, and use the following code to load the early_january_weather dataset:
 
 ```{r}
-samp = rnorm(100)
-length(samp)
+library(moderndive)
+data("early_january_weather")
 ```
 
-# Section 2
+The following code loads the early_january_weather dataset and includes a description 
 
-I can take the mean of the sample, too!
-The mean is `r mean(samp)`.
+```{r} 
+data_set <- data("early_january_weather")
+```
+
+Describing the Data Set 
+
+```{r}
+mean(early_january_weather$temp)
+range(early_january_weather$temp)
+median(early_january_weather$temp)
+mean(early_january_weather$temp)
+range(early_january_weather$humid)
+range(early_january_weather$wind_speed)
+```
+This dataset contains 358 observations of 15 variables, including: origin, year, month, day, hour, temperature, dew, humidity, wind direction, wind speed, wind gust,precipitation, pressure, visibility.
+Values for temperature range from 24.08 to 57.92, the mean of temperature is 39.5821.
+
+
+
+```{r}
+typeof(early_january_weather)
+data_set_vector <- as.matrix(data_set)
+nrow(early_january_weather)
+ncol(early_january_weather)
+mean(early_january_weather[["temp"]]) # or
+mean(early_january_weather$temp)
+```
