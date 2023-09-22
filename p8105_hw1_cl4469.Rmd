@@ -1,24 +1,25 @@
 ---
-title: "Simple document"
-output: pdf_document
+title: "p8105_hw_cl4469"
+Author: Chen Liang
+output: github_document
 ---
 
 # Problem 1
 
-Load the moderndive library, and use the following code to load the early_january_weather dataset:
+###### Load the moderndive library, and use the following code to load the early_january_weather dataset:
 
 ```{r}
 library(moderndive)
 data("early_january_weather")
 ```
 
-The following code loads the early_january_weather dataset and includes a description 
+###### The following code loads the early_january_weather dataset and includes a description 
 
 ```{r} 
 data_set <- data("early_january_weather")
 ```
 
-Describing the Data Set 
+###### Describing the Data Set 
 
 ```{r}
 mean(early_january_weather$temp)
@@ -28,46 +29,97 @@ range(early_january_weather$humid)
 mean(early_january_weather$humid)
 range(early_january_weather$wind_speed)
 ```
-This data set contains 358 observations of 15 variables, including: origin, year, month, day, hour, temperature, dew, humidity, wind direction, wind speed, wind gust,precipitation, pressure, visibility.
-Values for temperature range from 24.08 to 57.92, the mean of temperature is 39.5821, median is 39.02. Values for humidity range from 32.86 to 100, mean humidity is 65.4767. Values for wind speee range from 0 to 24.14.
+This data set contains 358 observations of 15 variables,
+including: origin, year, month, day, hour, temperature, dew,
+humidity, wind direction, wind speed, wind
+gust,precipitation, pressure, visibility.
 
-Describe the size of the dataset (using nrow and ncol)
+Values for temperature range from 24.08 to 57.92, the mean
+of temperature is 39.5821, median is 39.02. Values for
+humidity range from 32.86 to 100, mean humidity is 65.4767.
+Values for wind speee range from 0 to 24.14.
+
+###### Describe the size of the dataset (using nrow and ncol)
 ```{r}
 nrow(early_january_weather)
 ncol(early_january_weather)
 ```
 
-Describe the mean temperature
+###### Describe the mean temperature
 ```{r}
 mean(early_january_weather$temp)
 ```
 
-Make a scatterplot of temp (y) vs time_hour (x)
+###### Make a scatterplot of temp (y) vs time_hour (x)
 ```{r}
 library(ggplot2)
 
-ggplot(early_january_weather,aes(x=time_hour,y=temp, color=temp))+geom_point()
-+ggtitle("temperature vs. time_hour")+
+ggplot(early_january_weather,aes(x=time_hour,y=temp, color=temp))+
+  geom_point()+
+  ggtitle("temperature vs. time_hour")+
   theme(plot.title = element_text(hjust = 0.5))
 
 ggsave("scatterplot_temp vs. time_hour.pdf")
 ```
-Describe this plot:
-Temperatures are changing all the time, and in general, early January is showing an upward trend. However, we can also clearly see that the temperature is falling and then rising on a daily basis, constantly repeating itself. In addition, the day at the beginning of the month and the day in the middle of the month the temperature drops significantly.
+###### Describe this plot:
+Temperatures are changing all the time, and in general, early
+January is showing an upward trend. However, we can also
+clearly see that the temperature is falling and then rising
+on a daily basis, constantly repeating itself. In addition,
+the day at the beginning of the month and the day in the
+middle of the month the temperature drops significantly.
 
-#Problem 2
+# Problem 2
 
 ```{r, results= FALSE}
 library(dplyr)
 ```
-Creat Sample data frame
+
+###### Creat Sample data frame
 ```{r}
-prob_df = 
-  tibble( 
-    sample_var = rnorm(10),
-    logic_var = sample_var > 0,
-    character_var = c("one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten"),
-    factor_var = factor(c(rep("low",3),rep("medium",2), rep("high",5))),
-    )
+problem_df= tibble(
+  vec_numeric = rnorm(10),
+  vec_logical = vec_numeric > 0,
+  vec_char = c("one", "two", "three", "four", "five", "six", "seven", "eight",
+  "nine", "ten"),
+  vec_factor = factor(c(rep("low",3),rep("medium",3), rep("high",4)))
+)
 ```
+
+###### Now, I try to take the mean of each variable in my data frame
+```{r}
+mean(problem_df)
+mean(pull(problem_df, vec_numeric))
+mean(pull(problem_df, vec_logical))
+mean(pull(problem_df, vec_char))
+mean(pull(problem_df, vec_factor))
+```
+The result shows that the mean of the numerical random 
+sample vector (vec_numeric) and logical vector (vec_logical)
+worked. However, some don't work. The mean of the character
+vector (vec_char) and factor vector (vec_fac) shows that the
+argument is not numeric or logical.
+
+###### Thus, I will convert variables from one type to another.
+```{r}
+as.numeric(pull(problem_df, vec_logical))
+as.numeric(pull(problem_df, vec_char))
+as.numeric(pull(problem_df, vec_factor))
+```
+When we change these variables into numerics, logical vector
+can be changed into a numeric vector with 0's and 1's, this
+is because the data of number vector is True or False, which
+can converted to numeric of 0's and 1's.
+
+And also, the factor vector can be changed into a numeric
+vector with 1, 2, and 3, this is because "low""medium"
+"high" can be explained by each level of number. But there
+is no meaningful statistic to describe the 3 levels if we 
+take the mean of numeric factor, so this will not help to 
+explain taking a mean.
+
+However, if we convert vec_char into numeric vector, there 
+is a warning message: NAs introduced by coercion. Since 
+there is no logical way to put a number to these character 
+vector, mean cannot be found.
 
